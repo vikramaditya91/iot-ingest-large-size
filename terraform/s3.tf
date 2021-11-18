@@ -1,6 +1,7 @@
 resource "aws_s3_bucket" "s3_bucket" {
   bucket = "vikram-detection-bucket"
-  acl    = "private"
+  acl    = "public-read"
+  force_destroy = true
 
   versioning {
     enabled = false
@@ -8,3 +9,37 @@ resource "aws_s3_bucket" "s3_bucket" {
 }
 
 
+resource "aws_s3_bucket_policy" "b" {
+  bucket = aws_s3_bucket.s3_bucket.id
+
+  # Terraform's "jsonencode" function converts a
+  # Terraform expression's result to valid JSON syntax.
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Id      = "MYBUCKETPOLICY"
+    Statement = [
+      {
+        Sid       = "IPAllow"
+        Effect    = "Allow"
+        Principal = "*"
+        Action    = "s3:GetObject"
+        Resource = [
+          aws_s3_bucket.s3_bucket.arn,
+          "${aws_s3_bucket.s3_bucket.arn}/*",
+        ]
+      },
+    ]
+  })
+}
+
+
+resource "aws_s3_bucket_notification" "bucket_notification" {
+  bucket = aws_s3_bucket.s3_bucket.id
+
+  lambda_function {
+    lambda_function_arn = aws_lambda_function.email_lambda.arn
+    events              = ["s3:ObjectCreated:*"]
+  }
+
+  depends_on = [aws_lambda_permission.allow_s3_lambda]
+}
