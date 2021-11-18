@@ -123,6 +123,7 @@ def send_file_using_signed_url(object_path):
     # Demonstrate how another Python program can use the presigned URL to upload a file
     with open(object_path, 'rb') as f:
         files = {'file': (object_path, f)}
+        print(s3_signed_url)
         http_response = requests.post(s3_signed_url['url'], data=s3_signed_url['fields'], files=files)
     # If successful, returns HTTP status code 204
     print(f'File upload HTTP status code: {http_response}')
