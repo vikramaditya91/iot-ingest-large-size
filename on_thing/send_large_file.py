@@ -10,7 +10,6 @@ from uuid import uuid4
 import json
 
 certificate_dir = '/home/pi/certs'
-certificate_dir = '/Users/vikram/certs'
 root_cert = f"{certificate_dir}/Amazon-root-CA-1.pem"
 certificate = f"{certificate_dir}/device.pem.crt"
 private_key = f"{certificate_dir}/private.pem.key"
