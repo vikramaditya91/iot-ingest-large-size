@@ -27,13 +27,13 @@ class MQTTConnector:
         self.connection = self.get_mqtt_connection()
 
     def subscribe_to_topic(self, topic):
-        print("Subscribing to topic '{}'...".format(topic))
+        print(f"Subscribing to topic '{topic}'...")
         subscribe_future, packet_id = self.connection.subscribe(
             topic=topic,
             qos=mqtt.QoS.AT_LEAST_ONCE,
             callback=self.on_message_received)
         subscribe_result = subscribe_future.result()
-        print("Subscribed with {}".format(str(subscribe_result['qos'])))
+        print(f"Subscribed with {subscribe_result['qos']}")
 
     def get_mqtt_connection(self):
         event_loop_group = io.EventLoopGroup(1)
@@ -63,12 +63,12 @@ class MQTTConnector:
 
     @staticmethod
     def on_connection_interrupted(connection, error, **kwargs):
-        print("Connection interrupted. error: {}".format(error))
+        print(f"Connection interrupted. error: {error}")
 
     # Callback when an interrupted connection is re-established.
     @classmethod
     def on_connection_resumed(cls,connection, return_code, session_present, **kwargs):
-        print("Connection resumed. return_code: {} session_present: {}".format(return_code, session_present))
+        print(f"Connection resumed. return_code: {return_code} session_present: {session_present}")
 
         if return_code == mqtt.ConnectReturnCode.ACCEPTED and not session_present:
             print("Session did not persist. Resubscribing to existing topics...")
@@ -80,7 +80,7 @@ class MQTTConnector:
 
     # Callback when the subscribed topic receives a message
     def on_message_received(self, topic, payload, dup, qos, retain, **kwargs):
-        print("Received message from topic '{}': {}".format(topic, payload))
+        print(f"Received message from topic '{topic}': {payload}")
         if topic == obtain_url_topic_name:
             received_all_event.set()
             print("received_all_event is now set")
@@ -94,7 +94,7 @@ class MQTTConnector:
 
         for topic, qos in resubscribe_results['topics']:
             if qos is None:
-                sys.exit("Server rejected resubscribe to topic: {}".format(topic))
+                sys.exit(f"Server rejected resubscribe to topic: {topic}")
 
 
 class SignedURLMQTT(MQTTConnector):

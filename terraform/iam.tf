@@ -1,8 +1,5 @@
-resource "aws_iam_role" "iam_for_lambda" {
+resource "aws_iam_role" "generic_iam_lambda_role" {
   name = "test_role"
-
-  # Terraform's "jsonencode" function converts a
-  # Terraform expression result to valid JSON syntax.
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -16,16 +13,12 @@ resource "aws_iam_role" "iam_for_lambda" {
       },
     ]
   })
-
-  tags = {
-    tag-key = "tag-value"
-  }
 }
 
 
 resource "aws_iam_role_policy" "iam_policy_for_lambda" {
   name = "mypolicy"
-  role = aws_iam_role.iam_for_lambda.id
+  role = aws_iam_role.generic_iam_lambda_role.id
 
   policy = <<EOF
 {
@@ -42,3 +35,24 @@ resource "aws_iam_role_policy" "iam_policy_for_lambda" {
 }
 EOF
 }
+
+resource "aws_iot_policy" "pubsub" {
+  name = "iot-pub-sub-policy"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "iot:*"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
+

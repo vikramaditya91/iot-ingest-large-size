@@ -1,7 +1,7 @@
 resource "aws_lambda_function" "lambda_func" {
-  function_name = "generate_presigned_s3_url"
+  function_name = "generate_pre_signed_s3_url"
   handler = "presigned_url.lambda_handler"
-  role          = aws_iam_role.iam_for_lambda.arn
+  role          = aws_iam_role.generic_iam_lambda_role.arn
   runtime = "python3.9"
   filename = data.archive_file.lambda_zip_file.output_path
   layers = ["arn:aws:lambda:eu-central-1:770693421928:layer:Klayers-python38-aws-xray-sdk:100"]
@@ -17,18 +17,10 @@ data "archive_file" "lambda_zip_file" {
   }
 }
 
-resource "aws_lambda_permission" "allow_cloudwatch" {
-  statement_id  = "AllowIoTRule"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.lambda_func.function_name
-  principal     = "iot.amazonaws.com"
-  source_arn    = aws_iot_topic_rule.iot_rule_url_topic.arn
-}
-
 resource "aws_lambda_function" "email_lambda" {
   function_name = "email_lambda"
   handler = "email_lambda.lambda_handler"
-  role          = aws_iam_role.iam_for_lambda.arn
+  role          = aws_iam_role.generic_iam_lambda_role.arn
   runtime = "python3.9"
   filename = data.archive_file.lambda_email_zip.output_path
   layers = ["arn:aws:lambda:eu-central-1:770693421928:layer:Klayers-python38-aws-xray-sdk:100"]
@@ -49,6 +41,16 @@ data "archive_file" "lambda_email_zip" {
     filename = "email_lambda.py"
   }
 }
+
+
+resource "aws_lambda_permission" "allow_cloudwatch" {
+  statement_id  = "AllowIoTRuleToInvokeLambda"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.lambda_func.function_name
+  principal     = "iot.amazonaws.com"
+  source_arn    = aws_iot_topic_rule.iot_rule_url_topic.arn
+}
+
 
 resource "aws_lambda_permission" "allow_s3_lambda" {
   statement_id  = "AllowS3ToInvokeLambda"
