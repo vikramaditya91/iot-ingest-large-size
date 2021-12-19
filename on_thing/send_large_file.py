@@ -121,6 +121,7 @@ def request_signed_url(mqtt_topic_name, basename):
 def send_file_using_signed_url(object_path):
     with open(object_path, 'rb') as f:
         files = {'file': (object_path, f)}
+        print(s3_signed_url)
         http_response = requests.post(s3_signed_url['url'], data=s3_signed_url['fields'], files=files)
     print(f'File upload HTTP status code: {http_response}')
 
