@@ -1,5 +1,5 @@
 resource "aws_lambda_function" "lambda_func" {
-  function_name = "presigned_s3_url"
+  function_name = "generate_presigned_s3_url"
   handler = "presigned_url.lambda_handler"
   role          = aws_iam_role.iam_for_lambda.arn
   runtime = "python3.9"
@@ -33,6 +33,12 @@ resource "aws_lambda_function" "email_lambda" {
   filename = data.archive_file.lambda_email_zip.output_path
   layers = ["arn:aws:lambda:eu-central-1:770693421928:layer:Klayers-python38-aws-xray-sdk:100"]
   timeout = 5
+  environment {
+    variables = {
+      FROM_ADDRESS = var.from_address
+      TO_ADDRESSES = var.to_addresses
+    }
+  }
 }
 
 data "archive_file" "lambda_email_zip" {

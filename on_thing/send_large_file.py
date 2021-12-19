@@ -1,7 +1,6 @@
 import pathlib
 import socket
-import logging
-from awscrt import io, mqtt, auth, http
+from awscrt import io, mqtt
 from awsiot import mqtt_connection_builder
 import sys
 import threading
@@ -13,11 +12,11 @@ certificate_dir = '/home/pi/certs'
 root_cert = f"{certificate_dir}/Amazon-root-CA-1.pem"
 certificate = f"{certificate_dir}/device.pem.crt"
 private_key = f"{certificate_dir}/private.pem.key"
-
+bucket_name = "motion-detection-bucket"
 endpoint_url = "ai6lmrf5duzrr-ats.iot.eu-central-1.amazonaws.com"
-
 common_request_url_topic_name = "url_topic"
 obtain_url_topic_name = "rpi3_topic"
+
 
 received_all_event = threading.Event()
 s3_signed_url = {}
@@ -100,7 +99,7 @@ class MQTTConnector:
 
 class SignedURLMQTT(MQTTConnector):
     def demand_signed_url(self, mqtt_topc_name, basename):
-        message = {"bucket_name": "vikram-detection-bucket",
+        message = {"bucket_name": bucket_name,
                    "filename": basename,
                    "topic_to_post": obtain_url_topic_name}
         print(f"Publishing message to topic '{mqtt_topc_name}': {message}")
@@ -120,11 +119,9 @@ def request_signed_url(mqtt_topic_name, basename):
 
 
 def send_file_using_signed_url(object_path):
-    # Demonstrate how another Python program can use the presigned URL to upload a file
     with open(object_path, 'rb') as f:
         files = {'file': (object_path, f)}
         http_response = requests.post(s3_signed_url['url'], data=s3_signed_url['fields'], files=files)
-    # If successful, returns HTTP status code 204
     print(f'File upload HTTP status code: {http_response}')
 
 

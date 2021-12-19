@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "s3_bucket" {
-  bucket = "vikram-detection-bucket"
+  bucket = var.s3_bucket_name
   acl    = "public-read"
   force_destroy = true
 
@@ -9,14 +9,12 @@ resource "aws_s3_bucket" "s3_bucket" {
 }
 
 
-resource "aws_s3_bucket_policy" "b" {
+resource "aws_s3_bucket_policy" "bucket_policy" {
   bucket = aws_s3_bucket.s3_bucket.id
 
-  # Terraform's "jsonencode" function converts a
-  # Terraform expression's result to valid JSON syntax.
   policy = jsonencode({
     Version = "2012-10-17"
-    Id      = "MYBUCKETPOLICY"
+    Id      = "PUBLIC_ACCESS_S3_Bucket"
     Statement = [
       {
         Sid       = "IPAllow"
