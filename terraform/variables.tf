@@ -15,13 +15,19 @@ variable "region" {
 }
 
 variable "from_address" {
-  type = string
+  type        = string
   description = "The from email address which sends the notifications.\nThis email address needs to be verified on SES https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html"
 }
 
 variable "to_addresses" {
   type        = string
   description = "Email addresses which should receive the link to the video"
+}
+
+variable "request_url_topic" {
+  type        = string
+  description = "Request pre-signed by pub to this topic. This needs to match with the variable in send_large_file.py"
+  default     = "request_url_topic"
 }
 
 output "iot_endpoint_url" {

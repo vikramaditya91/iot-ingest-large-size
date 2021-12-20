@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "s3_bucket" {
-  bucket = var.s3_bucket_name
-  acl    = "public-read"
+  bucket        = var.s3_bucket_name
+  acl           = "public-read"
   force_destroy = true
 
   versioning {
@@ -12,15 +12,15 @@ resource "aws_s3_bucket_policy" "bucket_policy" {
   bucket = aws_s3_bucket.s3_bucket.id
 
   policy = jsonencode({
-    Version = "2012-10-17"
-    Id      = "PUBLIC_ACCESS_S3_Bucket"
+    Version   = "2012-10-17"
+    Id        = "PUBLIC_ACCESS_S3_Bucket"
     Statement = [
       {
         Sid       = "IPAllow"
         Effect    = "Allow"
         Principal = "*"
         Action    = "s3:GetObject"
-        Resource = [
+        Resource  = [
           aws_s3_bucket.s3_bucket.arn,
           "${aws_s3_bucket.s3_bucket.arn}/*",
         ]

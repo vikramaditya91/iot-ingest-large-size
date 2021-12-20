@@ -14,8 +14,9 @@ certificate = f"{certificate_dir}/device.pem.crt"
 private_key = f"{certificate_dir}/private.pem.key"
 bucket_name = "motion-detection-bucket"
 endpoint_url = "ai6lmrf5duzrr-ats.iot.eu-central-1.amazonaws.com"
-common_request_url_topic_name = "url_topic"
-obtain_url_topic_name = "rpi3_topic"
+common_request_url_topic_name = "request_url_topic"
+
+obtain_url_topic_name = "deliver_presigned_url_topic"
 
 
 received_all_event = threading.Event()
@@ -78,8 +79,8 @@ class MQTTConnector:
             # evaluate result with a callback instead.
             resubscribe_future.add_done_callback(cls.on_resubscribe_complete)
 
-    # Callback when the subscribed topic receives a message
-    def on_message_received(self, topic, payload, dup, qos, retain, **kwargs):
+    @staticmethod
+    def on_message_received(topic, payload, dup, qos, retain, **kwargs):
         print(f"Received message from topic '{topic}': {payload}")
         if topic == obtain_url_topic_name:
             received_all_event.set()

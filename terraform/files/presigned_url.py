@@ -6,7 +6,7 @@ AWS_REGION = os.environ['AWS_REGION']
 
 
 def lambda_handler(event, context):
-    # Get the service client.
+    """Generates the pre-signed URL and posts it to the topic"""
     s3 = boto3.client('s3')
 
     url = s3.generate_presigned_post(event['bucket_name'],
@@ -26,4 +26,3 @@ def lambda_handler(event, context):
     return {
         'statusCode': 200,
     }
-
