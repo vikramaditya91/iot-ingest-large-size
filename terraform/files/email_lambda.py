@@ -4,7 +4,7 @@ from botocore.exceptions import ClientError
 
 SENDER = os.environ['FROM_ADDRESS']
 
-RECIPIENT = os.environ['TO_ADDRESSES']
+RECIPIENT = os.environ['TO_ADDRESSES'].split(",")
 
 AWS_REGION = os.environ['AWS_REGION']
 

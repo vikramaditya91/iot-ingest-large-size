@@ -1,6 +1,6 @@
 resource "aws_lambda_function" "lambda_func" {
   function_name = "generate_pre_signed_s3_url"
-  handler = "presigned_url.lambda_handler"
+  handler = "publish_presigned_url_lambda.lambda_handler"
   role          = aws_iam_role.generic_iam_lambda_role.arn
   runtime = "python3.9"
   filename = data.archive_file.lambda_zip_file.output_path
@@ -12,8 +12,8 @@ data "archive_file" "lambda_zip_file" {
   output_path = "/tmp/lambda_zip_file_int.zip"
   type = "zip"
   source {
-    content = file("./files/presigned_url.py")
-    filename = "presigned_url.py"
+    content = file("./files/publish_presigned_url_lambda.py")
+    filename = "publish_presigned_url_lambda.py"
   }
 }
 
