@@ -13,11 +13,10 @@ root_cert = f"{certificate_dir}/Amazon-root-CA-1.pem"
 certificate = f"{certificate_dir}/device.pem.crt"
 private_key = f"{certificate_dir}/private.pem.key"
 bucket_name = "motion-detection-bucket"
-endpoint_url = "ai6lmrf5duzrr-ats.iot.eu-central-1.amazonaws.com"
+endpoint_url = "<set_your_endpoint_url_here>.iot.eu-central-1.amazonaws.com"
 common_request_url_topic_name = "request_url_topic"
 
 obtain_url_topic_name = "deliver_presigned_url_topic"
-
 
 received_all_event = threading.Event()
 s3_signed_url = {}
@@ -68,7 +67,7 @@ class MQTTConnector:
 
     # Callback when an interrupted connection is re-established.
     @classmethod
-    def on_connection_resumed(cls,connection, return_code, session_present, **kwargs):
+    def on_connection_resumed(cls, connection, return_code, session_present, **kwargs):
         print(f"Connection resumed. return_code: {return_code} session_present: {session_present}")
 
         if return_code == mqtt.ConnectReturnCode.ACCEPTED and not session_present:
@@ -131,4 +130,3 @@ if __name__ == "__main__":
     file_name = pathlib.Path(sys.argv[-1]).name
     request_signed_url(common_request_url_topic_name, file_name)
     send_file_using_signed_url(sys.argv[-1])
-

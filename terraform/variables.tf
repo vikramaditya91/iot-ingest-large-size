@@ -31,13 +31,13 @@ variable "request_url_topic" {
 }
 
 variable "lambda_layer_with_boto3" {
-  type = string
+  type        = string
   description = "Choose a lambda layer from here which contains the boto3 package. \nIt is regularly updated here https://github.com/keithrozario/Klayers/blob/master/deployments/python3.8/arns/eu-central-1.csv"
-  default = "arn:aws:lambda:eu-central-1:770693421928:layer:Klayers-python38-aws-xray-sdk:100"
+  default     = "arn:aws:lambda:eu-central-1:770693421928:layer:Klayers-python38-aws-xray-sdk:100"
 }
 
 
 data "aws_caller_identity" "current" {}
 locals {
-    account_id = data.aws_caller_identity.current.account_id
+  account_id = data.aws_caller_identity.current.account_id
 }
