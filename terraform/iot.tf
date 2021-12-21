@@ -19,5 +19,3 @@ resource "aws_iot_topic_rule" "iot_rule_url_topic" {
   }
 
 }
-
-data "aws_iot_endpoint" "iot_endpoint" {}

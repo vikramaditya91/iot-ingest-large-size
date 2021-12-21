@@ -45,17 +45,22 @@ git clone https://github.com/vikramaditya91/iot-ingest-large-size.git
 ```
 * Create a virtual environment of Python3+
 * Install the dependencies listed in pip_requirements.txt
+* Set the correct values in `send_large_file.py`
+  * paths to the certificates
+  * bucket-name as set in `variables.tf`
+  * end-point url as obtained above
+  * request url topic as set in `variables.tf`
 * Run the script `python send_large_file.py <full_path_to_file_to_be_uploaded>`
+
+
+## Additional information
+
+* This project was originally meant for a motion detection system for when my cat Doudou wanted to be let in
+![Dudu cat](https://i.ibb.co/HtcgdWN/Whats-App-Image-2021-12-20-at-11-18-42-PM.jpg)
+* Motion was detected using the [Motion Project](https://motion-project.github.io/)
 
 
 
 ## Authors
 
 [Vikramaditya Gaonkar](https://github.com/vikramaditya91)
-
-
-## Additional information
-
-* This project was originally meant for a motion detection system for when my cat wanted to be let in
-![Dudu cat](https://i.ibb.co/HtcgdWN/Whats-App-Image-2021-12-20-at-11-18-42-PM.jpg)
-* Motion was detected using the [Motion Project](https://motion-project.github.io/)

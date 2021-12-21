@@ -30,6 +30,8 @@ variable "request_url_topic" {
   default     = "request_url_topic"
 }
 
-output "iot_endpoint_url" {
-  value = aws_iot_thing.iot_thing
+
+data "aws_caller_identity" "current" {}
+locals {
+    account_id = data.aws_caller_identity.current.account_id
 }
