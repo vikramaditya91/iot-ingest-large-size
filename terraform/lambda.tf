@@ -4,7 +4,7 @@ resource "aws_lambda_function" "lambda_func" {
   role          = aws_iam_role.presigned_url_iam_role.arn
   runtime       = "python3.9"
   filename      = data.archive_file.lambda_zip_file.output_path
-  layers        = ["arn:aws:lambda:${var.region}:770693421928:layer:Klayers-python38-aws-xray-sdk:100"]
+  layers        = [var.lambda_layer_with_boto3]
   timeout       = 5
 }
 
@@ -23,7 +23,7 @@ resource "aws_lambda_function" "email_lambda" {
   role          = aws_iam_role.send_email_iam_role.arn
   runtime       = "python3.9"
   filename      = data.archive_file.lambda_email_zip.output_path
-  layers        = ["arn:aws:lambda:${var.region}:770693421928:layer:Klayers-python38-aws-xray-sdk:100"]
+  layers        = [var.lambda_layer_with_boto3]
   timeout       = 5
   environment {
     variables = {

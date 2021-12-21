@@ -30,6 +30,7 @@ Once the object is uploaded, the S3 Notification triggers a Lambda which sends a
 git clone https://github.com/vikramaditya91/iot-ingest-large-size.git
 ```
 * Get the ARN of the certificate and set it in the `terraform/variables.tf`
+* Adjust other variables in `terraform/variables.tf` as required
 * Apply the terraform configuration:
 ```
 cd terraform
